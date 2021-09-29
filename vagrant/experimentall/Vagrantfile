@@ -1,0 +1,77 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+Vagrant.configure("2") do |config|
+    config.vm.provision "shell", inline: <<-SHELL
+        echo "10.0.0.10  master-node" >> /etc/hosts
+        echo "10.0.0.11  worker-node01" >> /etc/hosts
+        echo "disable swap"
+        sudo swapoff -a
+        sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+        echo "Install Docker Container Runtime On All The Nodes"
+        echo "Install the required packages for Docker"
+        sudo apt-get update -y
+        sudo apt-get install -y \
+            apt-transport-https \
+            ca-certificates \
+            curl \
+            gnupg \
+            lsb-release
+        echo "Add the Docker GPG key and apt repository"
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+        echo \
+          "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+           $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        echo "Install the Docker community edition"   
+        sudo apt-get update -y
+        sudo apt-get install docker-ce docker-ce-cli containerd.io -y
+        echo "Add the docker daemon configurations to use systemd as the cgroup driver"
+        
+        cat <<EOF | sudo tee /etc/docker/daemon.json
+        {
+          "exec-opts": ["native.cgroupdriver=systemd"],
+          "log-driver": "json-file",
+          "log-opts": {
+            "max-size": "100m"
+          },
+          "storage-driver": "overlay2"
+        }
+        EOF
+
+        echo "Start and enable the docker service"
+        sudo systemctl enable docker
+        sudo systemctl daemon-reload
+        sudo systemctl restart docker
+        echo "Docker Runtime Configured Successfully"
+		    reboot
+        sudo apt-get update
+		    sudo apt-get install -y apt-transport-https ca-certificates curl
+		    sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+		    echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+		    sudo apt-get update -y
+		    sudo apt-get install -y kubelet kubeadm kubectl
+    SHELL
+  
+    config.vm.define "master" do |master|
+        master.vm.box = "bento/ubuntu-18.04"
+        master.vm.hostname = "master-node"
+        master.vm.network "private_network", ip: "10.0.0.10"
+        master.vm.provider "virtualbox" do |vb|
+            vb.memory = 2048
+            vb.cpus = 2
+      end
+    end
+    (1..1).each do |i|
+  
+    config.vm.define "node0#{i}" do |node01|
+      node01.vm.box = "bento/ubuntu-18.04"
+      node01.vm.hostname = "worker-node0#{i}"
+      node01.vm.network "private_network", ip: "10.0.0.1#{i}"
+      node01.vm.provider "virtualbox" do |vb|
+          vb.memory = 2048
+          vb.cpus = 1
+      end
+    end
+
+  
+    end
+  end

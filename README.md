@@ -1,2 +1,2 @@
-# mirantis1
-kubernetis djenkins nginx
+# mirantis
+my_technikal_task

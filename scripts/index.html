@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+
+<style>
+html { color-scheme: light dark; }
+body { width: 40em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<center>
+<body onload="elastictext">   
+<h1>Welcome to nginx!</h1>
+<h2 id="elastictext" >Привет я крутой DevOps !!!! :-)</h2>
+<script type="text/javascript">
+   
+    var ElasticSpacingID = "elastictext";
+    
+    var MaximumLetterSpacing = 7;
+    var MinimumLetterSpacing = -1;    
+    var ElasticAdjustmentSpeed = 111; 
+    var StopPointSeconds = 0;
+    
+    var AdjustmentDirection = +1;
+    var ElasticSpacingDiv = document.getElementById(ElasticSpacingID);
+    var CurrentSpacing = ElasticSpacingDiv.style.letterSpacing;
+    if( ! CurrentSpacing.length ) { CurrentSpacing = 0; }
+    CurrentSpacing = parseInt(CurrentSpacing);
+    var ElasticityInterval;
+    
+    function AdjustLetterSpacing() {
+    if( CurrentSpacing >= MaximumLetterSpacing ) { AdjustmentDirection = -1; }
+    else if( CurrentSpacing <= MinimumLetterSpacing ) { AdjustmentDirection = +1; }
+    CurrentSpacing += AdjustmentDirection;
+    ElasticSpacingDiv.style.letterSpacing = CurrentSpacing + "px";
+    }
+    
+    function StopAnimation() { clearInterval(ElasticityInterval); }
+    
+    ElasticityInterval = setInterval("AdjustLetterSpacing()",ElasticAdjustmentSpeed);
+    
+    if( StopPointSeconds > 0 ) { setTimeout("StopAnimation()",parseInt(StopPointSeconds*100)); }
+</script>
+    
+    
+<hr>
+
+</body>
+</html>
