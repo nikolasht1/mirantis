@@ -14,8 +14,11 @@ sudo kubeadm init --apiserver-advertise-address=$IPADDR  --apiserver-cert-extra-
 #copi admin-config
 
 mkdir -p $HOME/.kube
+sleep 1
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sleep 1
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
+sleep 1
 
 curl https://docs.projectcalico.org/manifests/calico.yaml -O
 
@@ -58,3 +61,16 @@ kubectl apply -f https://raw.githubusercontent.com/scriptcamp/kubeadm-scripts/ma
 
 #kubectl create clusterrolebinding jenkins --clusterrole cluster-admin --serviceaccount=jenkins:default
 
+###############################
+#command on the master node baremetal
+# kubectl logs -f my-release-nginx-ingress-865865d656-rsv5n -n ingres-nginx
+#kubectl get svc -n ingres-nginx
+#kubectl get po -n ingres-nginx
+#kubectl create ns ingres-nginx
+#kubectl get po -n kube-system
+#In my case I've patched the service like this:
+#kubectl patch svc <svc-name> -n <namespace> -p '{"spec": {"type": "LoadBalancer", "externalIPs":["172.31.71.218"]}}'
+#kubectl apply -f test3-deployment.yaml
+#kubectl apply -f test1-ingres.yaml
+# kubectl get ing -A    shou ingress 
+#kubectl get po -n test1 -o wide
