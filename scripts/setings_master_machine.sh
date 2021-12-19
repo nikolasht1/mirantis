@@ -38,14 +38,14 @@ kubectl get po -n kube-system
 #Then you can join any number of worker nodes by running the following on each as root:
 
 #kubectl get nodes
-echo "install metrics"
-kubectl apply -f https://raw.githubusercontent.com/scriptcamp/kubeadm-scripts/main/manifests/metrics-server.yaml
+#echo "install metrics"
+#kubectl apply -f https://raw.githubusercontent.com/scriptcamp/kubeadm-scripts/main/manifests/metrics-server.yaml
 
-echo "show token"
-kubeadm token create --print-join-command
+#echo "get token"
+#kubeadm token create --print-join-command
 
-echo "show metrics"
-kubectl top nodes
+#echo "show metrics"
+#kubectl top nodes
 
 #install Helm for ubuntu
 #curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
