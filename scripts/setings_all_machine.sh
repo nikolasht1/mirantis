@@ -1,8 +1,10 @@
 #!/bin/bash
+
 echo "disable swap"
 sudo swapoff -a
 sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
-#Install Docker Container Runtime On All The Nodes
+
+
 #Install the required packages for Docker
 sudo apt-get update -y
 sudo apt-get install -y \
@@ -46,8 +48,7 @@ sudo systemctl enable docker
 sudo systemctl daemon-reload
 sudo systemctl restart docker
 
-echo "Docker Runtime Configured Successfully"
-#Install Kubeadm & Kubelet & Kubectl on all Nodes
+echo "Install Kubeadm & Kubelet & Kubectl on all Nodes"
 #Install the required dependencies
 
 sudo apt-get update
@@ -62,6 +63,3 @@ echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https:/
 
 sudo apt-get update -y
 sudo apt-get install -y kubelet kubeadm kubectl
-
-sudo reboot
-
