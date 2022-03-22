@@ -1,0 +1,50 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: deployment-example
+spec:
+  replicas: 3
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.10
+        ports:
+        - containerPort: 80
+
+-----------------------------------------------------
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: nginx-ils-service
+spec:
+  ports:
+    - name: http
+      port: 80
+      nodePort: 30062
+  selector:
+    app: nginx
+  type: LoadBalancer
+
+------------------------------------------------------------------------------
+
+
+<<comment
+Если вы не используете GCE или EKS (вы использовали kubeadm ),
+ вы можете добавить externalIPsспецификацию к YAML вашей службы.
+  Вы можете использовать IP-адрес, связанный с основным интерфейсом вашего узла,
+   например eth0. Затем вы можете получить доступ к сервису извне, используя 
+   внешний IP-адрес узла.
+
+...
+spec:
+  type: LoadBalancer
+  externalIPs:
+  - 192.168.0.10
+
+comment

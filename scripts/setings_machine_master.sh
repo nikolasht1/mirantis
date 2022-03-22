@@ -8,23 +8,21 @@ NODENAME=$(hostname -s)
 
 sudo kubeadm init --apiserver-advertise-address=$IPADDR  --apiserver-cert-extra-sans=$IPADDR  --pod-network-cidr=192.168.0.0/16 --node-name $NODENAME --v=5
 
-#copi admin-config
+#copy admin-config
 
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-curl https://docs.projectcalico.org/manifests/calico.yaml -O
-
-#list all the pods in the kube-system namespace
-#kubectl get po -n kube-system
-
+#curl https://docs.projectcalico.org/manifests/calico.yaml -O
 
 # install the calico network plugin on the cluster
-kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
-kubectl apply -f calico.yaml
+#kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+#kubectl apply -f calico.yaml
 
-#kubectl get po -n kube-system
+#install wave on cluster
+#kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+#kubectl describe nodes
 
 #Join Worker Nodes To Kubernetes Master Node
 #kubeadm token create --print-join-command
@@ -44,11 +42,27 @@ echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt
 sudo apt-get update
 sudo apt-get install helm
 
-#kubeadm token create --print-join-command
-#create join file in shared directori
+#kubeadm token create --print-join-command in shared directory
+
 sudo kubeadm token create --print-join-command > /vagrant/joincluster.sh
 
-#create hermision for vagrant user
+#create permision for vagrant user
 mkdir -p /home/vagrant/.kube
 cp -i /etc/kubernetes/admin.conf /home/vagrant/.kube/config
 chown vagrant:vagrant /home/vagrant/.kube/config
+
+helm repo add projectcalico https://projectcalico.docs.tigera.io/charts
+helm repo update
+helm install calico projectcalico/tigera-operator --version v3.22.1
+#helm install calico projectcalico/tigera-operator --version v3.22.1 -f values.yaml
+
+
+
+
+<<comment
+#add ingress to cluster
+helm repo add nginx-stable https://helm.nginx.com/stable
+helm repo update
+kubectl create ns nginx-ingress
+helm install my-release nginx-stable/nginx-ingress -n nginx-ingress
+comment

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: jenkins-pv
-  namespace: jenkins
+  namespace: default
 spec:
   storageClassName: jenkins-pv
   accessModes:
@@ -16,4 +16,4 @@ spec:
 
     #kubectl create ns jenkins
     #kubectl apply -f jenkins-volume.yaml
-    #sudo chown -R 1000:1000 /data/jenkins-volume
+    #sudo chown -R 1000:1000 /data/jenkins-volume/

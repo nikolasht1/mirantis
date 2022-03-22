@@ -1,0 +1,21 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: my-jenkins-deployment
+  labels:
+    app : my-jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      project: mirantis
+  template:
+    metadata:
+      labels:
+        project: mirantis   # Service will look for those PODS Labels!!!
+    spec:
+      containers:
+        - name : mirantis-jenkins
+          image: jenkins/jenkins:lts
+          ports:
+            - containerPort: 8080

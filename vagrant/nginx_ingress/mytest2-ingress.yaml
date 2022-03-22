@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mytest2-ingress
+  namespace: mytest2
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: mytest2
+    http:
+      paths:
+      - path: /mytest2
+        pathType: Prefix
+        backend:
+          service:
+            name: mytest2-service
+            port:
+              number: 80

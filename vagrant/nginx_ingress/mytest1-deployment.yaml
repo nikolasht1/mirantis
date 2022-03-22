@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mytest1
+  namespace: mytest1
+spec:
+  selector:
+    matchLabels:
+      app: mytest1
+  template:
+    metadata:
+      labels:
+        app: mytest1
+    spec:
+      containers:
+      - name: mytest1
+        image: nginx:latest
+        imagePullPolicy: Always
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/bin/bash", "-c", "echo '<!DOCTYPE html>\n<h1>Hello you are checking domain mytest1</h1>' > /usr/share/nginx/html/index.html"]

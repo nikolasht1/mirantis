@@ -1,0 +1,10 @@
+version: "3.9"
+    
+services:
+  jenkins:
+    image: jenkins/jenkins:lts 
+    volumes:
+      - /var/jenkins:/var/jenkins
+    restart: always
+    ports:
+      - "8080:50000"      

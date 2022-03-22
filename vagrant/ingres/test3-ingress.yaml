@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: test3-ingress
+  namespace: test3
+spec:
+  rules:
+  - host: test3
+    http:
+      paths:
+      - pathType: ImplementationSpecific
+        backend:
+          service:
+            name: test3-service
+            port:
+              number: 80
