@@ -14,11 +14,8 @@ sudo kubeadm init --apiserver-advertise-address=$IPADDR  --apiserver-cert-extra-
 #copi admin-config
 
 mkdir -p $HOME/.kube
-sleep 1
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sleep 1
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
-sleep 1
 
 curl https://docs.projectcalico.org/manifests/calico.yaml -O
 

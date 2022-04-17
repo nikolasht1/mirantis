@@ -1,6 +1,0 @@
-# Default Values for my Helm Chart
-
-container:
-  image: jenkins/jenkins:lts
-
-replicaCount: 1
