@@ -134,6 +134,7 @@ apt-get install net-tools
 netstat -ntlp
 
 get deploiment
+kubectl get -n jenkinslts svc -w jenkins-service   
 kubectl get deployment mytest1 -n mytest1
 kubectl edit deployment mytest1 -n mytest1
 view ip pods
@@ -169,5 +170,17 @@ command instal on the specific node
 kubectl run --image=nginx:latest nginx \
     --overrides='{"apiVersion": "v1", "spec": {"nodeSelector": { "kubernetes.io/hostname": "ip-174-163.kryukov.local" }}}'
 
+for generate key
+- ssh-keygen
+validate key
+- eval $(ssh-agent -s)
+clip < ~/.ssh/id_rsa.pub
+ssh-copy-id 
+ssh-copy-id jenkins@ip
+cat ~/.ssh/id_rsa.pub | ssh jenkins@10.0.0.10 " cat >> ~/.ssh/authorized_keys"
+chmod:
+.ssh 700
+.pub 644
+key 600
 
 comment
