@@ -74,7 +74,6 @@ kubectl -n default edit svc my-release-kubernetes-dashboard
 kubectl create serviceaccount dashboard -n default
 kubectl create clusterrolebinding dashboard-admin -n default --clusterrole=cluster-admin --serviceaccount=default:dashboard
 kubectl get secret $(kubectl get serviceaccount dashboard -o jsonpath="{.secrets[0].name}") -o jsonpath="{.data.token}" | base64 --decode > ~/token-dashboard.txt
-
 #command on the master node baremetal
 #kubectl logs -f my-release-nginx-ingress-865865d656-rsv5n -n ingres-nginx
 #kubectl get svc -n ingres-nginx
@@ -182,5 +181,8 @@ chmod:
 .ssh 700
 .pub 644
 key 600
+
+see and create yaml file 
+minikube kubectl -- create deploy my-nginx --image nginx --dry-ryn -o yaml
 
 comment
